@@ -1,0 +1,72 @@
+TABLES
+
+* means primary key
+multiple * mean composite primary key
+
+user:
+	*user_id (int),
+	username (varchar2),
+	hashed_pwd (varchar2),
+	pwd_salt (varchar2),
+	last_login (datetime),
+	api_key (varchar2)
+	
+apis:
+	*api_id (int),
+	data_transfer_size (int),
+	req_type (varchar2),
+	
+requests_log:
+	*user_id (int),
+	*api_id (int),
+	*req_time (datetime),
+	resp_time (datetime),
+	fail (bool, default=0)
+	
+QUERIES:
+
+1.
+select log.api_id, avg(log.resp_time)
+from
+requests_log log
+inner join
+apis a
+on log.apid_id = a.api_id
+group by api_id
+order by resp_time
+limit 1
+
+2.
+select * from
+(
+	select v.user_id, max(v.resp_time) max_time
+	from 
+	(
+		select log.user_id, log.api_id, avg(log.resp_time)
+		from
+		requests_log log
+		inner join
+		apis a
+		on log.apid_id = a.api_id
+		group by user_id, api_id
+	) as v
+	group by v.user_id
+) as a
+inner join
+(
+	select log.user_id, log.api_id, avg(log.resp_time) avg_time
+	from
+	requests_log log
+	inner join
+	apis a
+	on log.apid_id = a.api_id
+	group by user_id, api_id
+) as b
+on 
+a.user_id = b.user_id
+group by user_id
+where 
+a.max_time = b.avg_time
+
+3.
+
