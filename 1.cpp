@@ -23,7 +23,7 @@ using namespace std;
 
 int check(int x, int y, vector<vector<int>>& grid, vector<vector<int>>& visited)
 {
-    if(x>=0 && x<grid.size() && y>=0 && y<grid[0].size() && visited[x][y]==0)
+    if(x>=0 && x<grid.size() && y>=0 && y<grid[0].size() && visited[x][y]==0  && grid[x][y]==1) 
         return 1;
     return 0;
 }
@@ -36,6 +36,7 @@ void bfs(vector<vector<int>>& grid, vector<vector<int>>& visited, int r, int c) 
     stack<pair<int,int>> st;
     st.push({r,c});
     visited[r][c] = coun;
+    // int blackLeft, blackRight
     while(!st.empty())
     {
         int x,y;
@@ -67,7 +68,7 @@ int main() {
 
     for(int i = 0; i < M; i++) {
         for(int j = 0; j < N; j++) {
-            if(!visited[i][j] and grid[i][j]==1) {
+            if(visited[i][j]==0 and grid[i][j]==1) {
                 bfs(grid, visited, i, j);
             }
         }
@@ -80,24 +81,25 @@ int main() {
     {
         for(int j=0;j<N;j++)
         {
-            if(visited[i][j]!=-1)
+            if(visited[i][j]!=0)
             {
-                max_x[visited[i][j]]=max(max_x[visited[i][j]],i);
-                max_y[visited[i][j]]=max(max_y[visited[i][j]],j);
-                min_x[visited[i][j]]=min(min_x[visited[i][j]],i);
-                min_y[visited[i][j]]=min(min_y[visited[i][j]],j);
+                max_x[visited[i][j]-1]=max(max_x[visited[i][j]-1],i);
+                max_y[visited[i][j]-1]=max(max_y[visited[i][j]-1],j);
+                min_x[visited[i][j]-1]=min(min_x[visited[i][j]-1],i);
+                min_y[visited[i][j]-1]=min(min_y[visited[i][j]-1],j);
             }
         }
     }
-    for(int i = 0; i < M; i++) {
-        for(int j = 0; j < N; j++) {
-            cout << visited[i][j] << ' ';
-        }
-        cout << endl;
-    }
+    // for(int i = 0; i < M; i++) {
+    //     for(int j = 0; j < N; j++) {
+    //         cout << visited[i][j] << ' ';
+    //     }
+    //     cout << endl;
+    // }
 
     for(int i=0;i<coun;i++)
     {
-        cout << (max_x[i]+min_x[i])/2 << ' ' << (max_y[i]+min_y[i])/2 << ' ' << max_x[i]-min_x[i] << ' ' << max_y[i]-min_y[i] << endl;
+        // cout << float(max_x[i]+min_x[i])/2 << ' ' << float(max_y[i]+min_y[i])/2 << ' ' << max_x[i]-min_x[i]+1 << ' ' << max_y[i]-min_y[i]+1 << endl;
+        cout <<  float(max_y[i]+min_y[i])/2 << ' ' << float(max_x[i]+min_x[i])/2 << ' ' <<  max_y[i]-min_y[i]+1 << ' ' << max_x[i]-min_x[i]+1 << endl;
     }
 }
