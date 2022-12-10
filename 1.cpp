@@ -96,10 +96,12 @@ int main() {
     //     }
     //     cout << endl;
     // }
-
+    vector<vector<float>> out;
     for(int i=0;i<coun;i++)
     {
         // cout << float(max_x[i]+min_x[i])/2 << ' ' << float(max_y[i]+min_y[i])/2 << ' ' << max_x[i]-min_x[i]+1 << ' ' << max_y[i]-min_y[i]+1 << endl;
         cout <<  float(max_y[i]+min_y[i])/2 << ' ' << float(max_x[i]+min_x[i])/2 << ' ' <<  max_y[i]-min_y[i]+1 << ' ' << max_x[i]-min_x[i]+1 << endl;
+        out.push_back({float(max_y[i]+min_y[i])/2, float(max_x[i]+min_x[i])/2, max_y[i]-min_y[i]+1, max_x[i]-min_x[i]+1});
     }
+    return 0;
 }
